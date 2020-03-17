@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "208242459776",
+    "firebase_url": "https://ots-on-the-spot-7e7a6.firebaseio.com",
+    "project_id": "ots-on-the-spot-7e7a6",
+    "storage_bucket": "ots-on-the-spot-7e7a6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:208242459776:android:83bc4472a2e80a74b49265",
+        "android_client_info": {
+          "package_name": "com.codefather.otsonthespot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "208242459776-dvmhaiusavq3oqpjsi29mejbgvsea2b3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.codefather.otsonthespot",
+            "certificate_hash": "bed9d3f46c51ad391522ed477278e2e7d22b84c9"
+          }
+        },
+        {
+          "client_id": "208242459776-pj45m0fh29ndvtnqnk63es9jkt4nsa4f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDI0rek_F6GRVYuvczNioSMmTvexls0hlk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "208242459776-pj45m0fh29ndvtnqnk63es9jkt4nsa4f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

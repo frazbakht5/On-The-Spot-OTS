@@ -1,0 +1,2 @@
+rootProject.name='OTS On The Spot'
+include ':app'
