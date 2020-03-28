@@ -342,7 +342,19 @@ public class TinyDB {
     	}
     	return objects;
     }
-    
+
+    public ArrayList<Chat> getListChat(String key){
+        Gson gson = new Gson();
+
+        ArrayList<String> objStrings = getListString(key);
+        ArrayList<Chat> objects =  new ArrayList<>();
+
+        for(String jObjString : objStrings){
+            Chat value  = gson.fromJson(jObjString,  Chat.class);
+            objects.add(value);
+        }
+        return objects;
+    }
 
     
     public <T> T getObject(String key, Class<T> classOfT){
@@ -593,5 +605,16 @@ public class TinyDB {
     	 if (value == null){
     		 throw new NullPointerException(); 
     	 }
+    }
+
+    public void putChatListObject(String key, ArrayList<Chat> userChats)
+    {
+        checkForNullKey(key);
+        Gson gson = new Gson();
+        ArrayList<String> objStrings = new ArrayList<String>();
+        for(Object obj : userChats){
+            objStrings.add(gson.toJson(obj));
+        }
+        putListString(key, objStrings);
     }
 }

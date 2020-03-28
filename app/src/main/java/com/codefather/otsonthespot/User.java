@@ -24,12 +24,12 @@ public class User implements Serializable
     }
 
 
-    public ArrayList<String> getChats()
+    public ArrayList<String> getChatsID()
     {
         return chatsID;
     }
 
-    public void setChats(ArrayList<String> chatsID)
+    public void setChatsID(ArrayList<String> chatsID)
     {
         this.chatsID = chatsID;
     }

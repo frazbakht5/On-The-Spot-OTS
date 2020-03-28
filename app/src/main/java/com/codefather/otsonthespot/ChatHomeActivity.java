@@ -2,29 +2,34 @@ package com.codefather.otsonthespot;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
-
-import com.google.firebase.database.FirebaseDatabase;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
 
 public class ChatHomeActivity extends AppCompatActivity implements View.OnClickListener
 {
-    ListView listView;
-    Button newChatButton;
-    EditText senderEditText;
-    EditText receiverEditText;
-    EditText messageEditText;
+    private static final String TAG = "ChatHomeActivity: ";
+    private static final String USER = "user";
+    private static final String CHAT = "chat";
 
-    ArrayList<Chat> chats;
+    private Button newChatButton;
+    private ListView allChatsListview;
+    private CustomAdapter customAdapter;
 
-    ArrayAdapter arrayAdapter;
+    ArrayList<Chat> userChats;
+
+    TinyDB tinydb;
+
 
 
     @Override
@@ -32,53 +37,91 @@ public class ChatHomeActivity extends AppCompatActivity implements View.OnClickL
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_home);
-
+        Log.e(TAG, "lol:--------------------------------------------");
         initialize();
 
         newChatButton.setOnClickListener(this);
 
-        //assign adapter to listview
-        listView.setAdapter(arrayAdapter);
+        Log.d(TAG, "lol: userChats size = " + userChats.size());
 
+        allChatsListview.setAdapter(customAdapter);
     }
 
     private void initialize()
     {
-        listView = findViewById(R.id.chatListview);
-        newChatButton = findViewById(R.id.newChatButton);
-        senderEditText = findViewById(R.id.senderEditText);
-        receiverEditText = findViewById(R.id.receiverEditText);
-        messageEditText = findViewById(R.id.messageEditText);
+        newChatButton = findViewById(R.id.startNewChatButton);
+        allChatsListview = findViewById(R.id.allChatsListview);
 
-        chats = new ArrayList<>();
+        tinydb = new TinyDB(getApplicationContext());
 
-//        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, chats);
-        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, chats);
+        userChats = tinydb.getListChat(CHAT);
 
+        customAdapter = new CustomAdapter();
     }
 
-    @Override
-    public void onClick(View v)
-    {
-        if (v == newChatButton)
-        {
-            String chatID = FirebaseDatabase.getInstance().getReference().push().getKey();
-            ArrayList<Message> messages = new ArrayList<>();
 
-            Chat newChat = new Chat(chatID, senderEditText.getText().toString(), receiverEditText.getText().toString(), messages);
-
-            messages.add(new Message(senderEditText.getText().toString(), receiverEditText.getText().toString(), messageEditText.getText().toString()));
-//            Chat newChat = new Chat("dummyID123", messages);
-
-//            arrayAdapter=new ArrayAdapter(this,android.R.layout.simple_list_item_1,newChat.getMessages());
-            arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, chats);
-        }
-    }
 
     @Override
     public void onBackPressed()
     {
-        super.onBackPressed();
+//        super.onBackPressed();
         ChatHomeActivity.this.finish();
     }
+
+
+    @Override
+    public void onClick(View v)
+    {
+        if (v==newChatButton)
+        {
+            Intent i = new Intent(ChatHomeActivity.this, NewChatActivity.class);
+            startActivity(i);
+        }
+    }
+
+    private class CustomAdapter extends BaseAdapter
+    {
+        @Override
+        public int getCount()
+        {
+            return userChats.size();
+        }
+
+        @Override
+        public Object getItem(int position)
+        {
+            return userChats.get(position);
+        }
+
+        @Override
+        public long getItemId(int position)
+        {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent)
+        {
+            View view = getLayoutInflater().inflate(R.layout.chat_home_display, null);
+
+
+            ImageView dpImageView;
+            TextView chatNameTextView;
+            TextView lastMessageTextView;
+
+            chatNameTextView = view.findViewById(R.id.chatNameTextView);
+            lastMessageTextView = view.findViewById(R.id.lastMessageTextView);
+
+
+            chatNameTextView.getText();
+            chatNameTextView.setText(userChats.get(position).getSecondParticipantID());
+            int index = userChats.get(position).getMessages().size()-1;
+            if (index > -1)
+            lastMessageTextView.setText(userChats.get(position).getMessages().get(index).getMessage());
+
+
+            return view;
+        }
+    }
 }
+//Log.d(TAG, "lol: ");

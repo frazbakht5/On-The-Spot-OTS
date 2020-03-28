@@ -31,6 +31,8 @@ public class SplashScreenActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+
+        Log.e(TAG, "lol:--------------------------------------------");
      /*
         This block of code checks the internet availability. if the phone is connected
         to Wifi then the app opens the login menu

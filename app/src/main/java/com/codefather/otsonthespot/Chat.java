@@ -9,6 +9,8 @@ public class Chat
     private String secondParticipantID;
     private ArrayList<Message> messages;
 
+    public Chat(){}
+
     public Chat(String chatID, String firstParticipantID, String secondParticipantID, ArrayList<Message> messages)
     {
         super();

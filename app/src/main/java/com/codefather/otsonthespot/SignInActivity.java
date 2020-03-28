@@ -26,8 +26,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener
@@ -35,6 +35,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private static final String TAG = "SIGNIN ACTIVITY: ";
     private static final String SHARED_PREFS_FILE = "sharedPreferencesFile";
     private static final String USER = "user";
+    private static final String CHAT = "chat";
 
     private FirebaseAuth mAuth;
     FirebaseDatabase database;
@@ -53,6 +54,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
 
+    ArrayList<Chat> userChats;
+
     TinyDB tinydb;
 
     @Override
@@ -60,6 +63,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+
+        Log.e(TAG, "lol:--------------------------------------------");
 
         initialize();
 
@@ -122,6 +127,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                                 // If sign in fails, display a message to the user.
                                 Log.w(TAG, "signInWithEmail:failure", task.getException());
                                 Toast.makeText(SignInActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                                signInProgressBar.setVisibility(View.GONE);
                             }
 
                             // ...
@@ -139,13 +145,19 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     private void updateUI()
     {
-        Log.d(TAG, "lol: in method updateUI");
+//        Log.d(TAG, "lol: in method updateUI");
 
+        loadUserInfo();
+
+
+    }
+
+    private void loadUserInfo()
+    {
         String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference requiredEntryRef = userRef.child(id);
 
-        Log.e(TAG, "lol : ref =" + userRef.toString());
-
+//        Log.e(TAG, "lol : ref =" + userRef.toString());
 
         // Read from the database
         requiredEntryRef.addValueEventListener(new ValueEventListener()
@@ -155,20 +167,19 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                Log.d(TAG, "lol: in method onDataChange");
-                User temp = dataSnapshot.getValue(User.class);
-                signedInUser = temp;
-                Log.d(TAG, "lol: signedInUser is: " + signedInUser);
+//                Log.d(TAG, "lol: in method onDataChange");
+
+                User signedInUser = dataSnapshot.getValue(User.class);
+//                Log.d(TAG, "lol: signedInUser is: " + signedInUser);
 
                 tinydb.putObject(USER, signedInUser);
-                Log.d(TAG, "lol: putObject Complete. Now gonna retrieve to check.");
+//                Log.d(TAG, "lol: putObject Complete. Now gonna retrieve to check.");
 
                 User temp2 = tinydb.getObject(USER, User.class);
 
-                Log.d(TAG, "lol: retrieved object temp2 = " + temp2);
+                Log.d(TAG, "lol: User in tinydb = " + temp2);
 
-                delayTimer(1000);
-
+                loadChats();
             }
 
             @Override
@@ -177,18 +188,65 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 // Failed to read value
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
+
+
         });
+    }
 
+    private void loadChats()
+    {
+        User user = tinydb.getObject(USER, User.class);
 
-            /*editor.putString(USER, ObjectSerializer.serialize(signedInUser));
-            Log.d(TAG, "lol Serialized = " + ObjectSerializer.serialize(signedInUser));*/
+        ArrayList<String> userChatsIDs = user.getChatsID();
+        userChats = new ArrayList<>();
+
+        DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference().child("Chat");
+
+        for (int i = 0; i < user.getChatsID().size(); i++)
+        {
+            chatRef.child(userChatsIDs.get(i)).addValueEventListener(new ValueEventListener()
+            {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot)
+                {
+                    // This method is called once with the initial value and again
+                    // whenever data at this location is updated.
+//                    Log.d(TAG, "lol: in method onDataChange");
+                    Chat temp = dataSnapshot.getValue(Chat.class);
+
+//                    Log.d(TAG, "lol: chat received is: " + temp);
+
+                    userChats.add(temp);
+                    String s = userChats.get(userChats.size() - 1).getChatID();
+//                    Log.d(TAG, "lol: added in userChat = " + s);
+//                    Log.d(TAG, "lol: userchat size = " + userChats.size());
+                    tinydb.putChatListObject(CHAT, userChats);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError error)
+                {
+                    // Failed to read value
+                    Log.w(TAG, "Failed to read value.", error.toException());
+                }
+            });
+        }
+
+/*        if(userChats.size() > 0)
+        {
+            tinydb.putChatListObject(CHAT, userChats);
+            Log.d(TAG, "lol: Putting this chat list in SP: " + userChats);
+            ArrayList<Chat> tempChat = tinydb.getListChat(CHAT);
+            Log.d(TAG, "lol: retrieved chat list = " + tempChat);
+
+        }
+        */
+
+        finalDelayTimer(2500);
     }
 
 
-
-
-
-    private void delayTimer(int time)
+    private void finalDelayTimer(int time)
     {
         new Handler().postDelayed(new Runnable()
         {
@@ -200,19 +258,26 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void run()
             {
-                // This method will be executed once the timer is over
-                // Start your app main activity
-//                Toast.makeText(DashboardActivity.this, "Everything is ready", Toast.LENGTH_SHORT).show();
-
-//                textview.setText(currentUser.getName());
 
                 Intent i = new Intent(SignInActivity.this, DashboardActivity.class);
 
                 signInProgressBar.setVisibility(View.GONE);
                 startActivity(i);
-
                 finish();
             }
         }, time);
     }
+
+    private void delayTimer(int time)
+    {
+        new Handler().postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+            }
+        }, time);
+    }
+
+
 }

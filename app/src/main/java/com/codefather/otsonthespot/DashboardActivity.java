@@ -30,6 +30,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
 
     private static final String SHARED_PREFS_FILE = "sharedPreferencesFile";
     private static final String USER = "user";
+    private static final String CHAT = "chat";
     private User currentUser;
 
     TinyDB tinydb;
@@ -40,12 +41,15 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+        Log.e(TAG, "lol:--------------------------------------------");
 
         initialize();
 
 
         chatButton.setOnClickListener(this);
         signoutButton.setOnClickListener(this);
+
+
 
 
     }
@@ -63,6 +67,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
         try
         {
             user = tinydb.getObject(USER, User.class);
+            Log.d(TAG, "lol: signedInUser is: " + user.getName() + " , ChatsID = " + user.getChatsID());
             textview.setText(user.getName());
         } catch (Exception e)
         {
