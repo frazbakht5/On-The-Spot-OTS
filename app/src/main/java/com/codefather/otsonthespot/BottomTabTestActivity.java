@@ -2,10 +2,13 @@ package com.codefather.otsonthespot;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -15,6 +18,8 @@ public class BottomTabTestActivity extends AppCompatActivity
 {
     private BottomNavigationView bottomNavigation;
     private TextView testTextView;
+    private FrameLayout frameLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -24,40 +29,9 @@ public class BottomTabTestActivity extends AppCompatActivity
 
         initialize();
 
-        bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener()
-        {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem)
-            {
-                switch (menuItem.getItemId())
-                {
-                    case R.id.profile:
-                        testTextView.setText("PROFILE");
-                        return true;
+        bottomNavigation.setOnNavigationItemSelectedListener(bnv);
 
-                    case R.id.dashboard:
-                        testTextView.setText("DASHBOARD");
-                        return true;
-
-                    case R.id.search:
-                        testTextView.setText("SEARCH");
-                        return true;
-
-                    case R.id.group:
-                        testTextView.setText("GROUP");
-                        return true;
-
-                    case R.id.inbox:
-                        testTextView.setText("INBOX");
-                        return true;
-
-                    default:
-                        return false;
-
-
-                }
-            }
-        });
+        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new SearchFragment()).commit();
 
 
     }
@@ -66,7 +40,7 @@ public class BottomTabTestActivity extends AppCompatActivity
     {
         bottomNavigation = findViewById(R.id.bottomNavigation);
         bottomNavigation.setSelectedItemId(R.id.search);
-
+        frameLayout = findViewById(R.id.frameLayout);
         testTextView = findViewById(R.id.testTextView);
     }
 
@@ -78,4 +52,43 @@ public class BottomTabTestActivity extends AppCompatActivity
         startActivity(i);
         finish();
     }
+
+    BottomNavigationView.OnNavigationItemSelectedListener bnv = new BottomNavigationView.OnNavigationItemSelectedListener()
+    {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem menuItem)
+        {
+
+            Fragment selectedFragment = null;
+            switch (menuItem.getItemId())
+            {
+                case R.id.profile:
+
+                    break;
+
+                case R.id.dashboard:
+
+                    break;
+
+                case R.id.search:
+                    selectedFragment = new SearchFragment();
+                    break;
+
+                case R.id.group:
+
+                    break;
+
+                case R.id.inbox:
+                    selectedFragment = new ChatHomeActivity();
+                    break;
+
+                default:
+                    return false;
+            }
+
+            getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, selectedFragment).commit();
+
+            return true;
+        }
+    };
 }

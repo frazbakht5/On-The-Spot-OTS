@@ -1,10 +1,14 @@
 package com.codefather.otsonthespot;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -16,7 +20,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 
-public class ChatHomeActivity extends AppCompatActivity implements View.OnClickListener
+public class ChatHomeActivity extends Fragment implements View.OnClickListener
 {
     private static final String TAG = "ChatHomeActivity: ";
     private static final String USER = "user";
@@ -26,18 +30,18 @@ public class ChatHomeActivity extends AppCompatActivity implements View.OnClickL
     private ListView allChatsListview;
     private CustomAdapter customAdapter;
 
+    private View view;
+
     ArrayList<Chat> userChats;
 
     TinyDB tinydb;
 
-
-
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState)
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat_home);
-        Log.e(TAG, "lol:--------------------------------------------");
+        view = inflater.inflate(R.layout.activity_chat_home, container, false);
+
         initialize();
 
         newChatButton.setOnClickListener(this);
@@ -45,14 +49,32 @@ public class ChatHomeActivity extends AppCompatActivity implements View.OnClickL
         Log.d(TAG, "lol: userChats size = " + userChats.size());
 
         allChatsListview.setAdapter(customAdapter);
+
+        return view;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_chat_home);
+        Log.e(TAG, "lol:--------------------------------------------");
+        /*initialize();
+
+        newChatButton.setOnClickListener(this);
+
+        Log.d(TAG, "lol: userChats size = " + userChats.size());
+
+        allChatsListview.setAdapter(customAdapter);*/
     }
 
     private void initialize()
     {
-        newChatButton = findViewById(R.id.startNewChatButton);
-        allChatsListview = findViewById(R.id.allChatsListview);
+        newChatButton = view.findViewById(R.id.startNewChatButton);
+        allChatsListview = view.findViewById(R.id.allChatsListview);
 
-        tinydb = new TinyDB(getApplicationContext());
+
+        tinydb = new TinyDB(getActivity().getApplicationContext());
 
         userChats = tinydb.getListChat(CHAT);
 
@@ -61,11 +83,11 @@ public class ChatHomeActivity extends AppCompatActivity implements View.OnClickL
 
 
 
-    @Override
+//    @Override
     public void onBackPressed()
     {
 //        super.onBackPressed();
-        ChatHomeActivity.this.finish();
+//        ChatHomeActivity.this.finish();
     }
 
 
@@ -74,8 +96,10 @@ public class ChatHomeActivity extends AppCompatActivity implements View.OnClickL
     {
         if (v==newChatButton)
         {
-            Intent i = new Intent(ChatHomeActivity.this, NewChatActivity.class);
+        /*    Intent i = new Intent(ChatHomeActivity.this, NewChatActivity.class);
             startActivity(i);
+
+         */
         }
     }
 
@@ -124,13 +148,13 @@ public class ChatHomeActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    @Override
-    protected void onResume()
+//    @Override
+    /*protected void onResume()
     {
         super.onResume();
 
         userChats = tinydb.getListChat(CHAT);
         allChatsListview.setAdapter(new CustomAdapter());
-    }
+    }*/
 }
 //Log.d(TAG, "lol: ");
