@@ -24,6 +24,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
 
     private static final String TAG = "DashboardActivity: ";
     private Button chatButton;
+    private Button bottomNavigationButton;
     private Button signoutButton;
     private User user;
     private TextView textview;
@@ -49,6 +50,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
         chatButton.setOnClickListener(this);
         signoutButton.setOnClickListener(this);
 
+        bottomNavigationButton.setOnClickListener(this);
 
 
 
@@ -59,7 +61,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
         chatButton = findViewById(R.id.chatButton);
         signoutButton = findViewById(R.id.signoutButton);
         textview = findViewById(R.id.textView);
-
+        bottomNavigationButton = findViewById(R.id.bottomNavigationButton);
 
         Context context = getApplicationContext();
         tinydb = new TinyDB(context);
@@ -95,6 +97,12 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
 
             startActivity(i);
             finish();
+        }
+
+        else if (v == bottomNavigationButton)
+        {
+            Intent i = new Intent(DashboardActivity.this, BottomTabTestActivity.class);
+            startActivity(i);
         }
     }
 

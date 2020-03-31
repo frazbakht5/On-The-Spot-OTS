@@ -9,8 +9,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -22,7 +25,6 @@ public class NewChatActivity extends AppCompatActivity implements View.OnClickLi
     private static final String CHAT = "chat";
 
     Button startNewChatButton;
-    EditText senderEditText;
     EditText receiverEditText;
     EditText messageEditText;
 
@@ -51,7 +53,6 @@ public class NewChatActivity extends AppCompatActivity implements View.OnClickLi
     private void initialize()
     {
         startNewChatButton = findViewById(R.id.startNewChatButton);
-        senderEditText = findViewById(R.id.senderEditText);
         receiverEditText = findViewById(R.id.receiverEditText);
         messageEditText = findViewById(R.id.messageEditText);
 
@@ -66,7 +67,7 @@ public class NewChatActivity extends AppCompatActivity implements View.OnClickLi
         if (chats == null)
             chats = new ArrayList<>();
 
-        Log.d(TAG, "lol: At the Beginning, \n\tTinyDB userChatIDs =  " + userChatIDs + "\n\tTinyDB Chats = " + chats);
+//        Log.d(TAG, "lol: At the Beginning, \n\tTinyDB userChatIDs =  " + userChatIDs + "\n\tTinyDB Chats = " + chats);
     }
 
     @Override
@@ -76,9 +77,44 @@ public class NewChatActivity extends AppCompatActivity implements View.OnClickLi
         {
             String newChatID = FirebaseDatabase.getInstance().getReference().push().getKey();
 
-            String firstID = senderEditText.getText().toString();
-            String secondID = receiverEditText.getText().toString();
-            String msgText = messageEditText.getText().toString();
+            String firstID = user.getUserID();
+            String firstName = user.getName();
+
+            String secondName = receiverEditText.getText().toString();
+
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("User");
+            userRef.addValueEventListener(new ValueEventListener()
+            {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot)
+                {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren())
+                    {
+                        User tempUser = snapshot.getValue(User.class);
+
+                        Log.d(TAG, "lol: tempUser name is: " + tempUser.getName());
+
+//                    tinydb.putObject(USER, signedInUser);
+//                Log.d(TAG, "lol: putObject Complete. Now gonna retrieve to check.");
+
+//                    User temp2 = tinydb.getObject(USER, User.class);
+
+//                    Log.d(TAG, "lol: User in tinydb = " + temp2);
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError error)
+                {
+                    // Failed to read value
+                    Log.w(TAG, "Failed to read value.", error.toException());
+                }
+
+
+            });
+//            String secondID =
+ /*           String msgText = messageEditText.getText().toString();
 
             Message message = new Message(firstID, secondID, msgText);
             ArrayList<Message> messageList = new ArrayList<>();
@@ -102,13 +138,15 @@ public class NewChatActivity extends AppCompatActivity implements View.OnClickLi
 
             Log.d(TAG, "lol: At the End, \n\tTinyDB userChatIDs =  " + userChatIDs + "\n\tTinyDB Chats = " + chats);
 
-
-            Intent i = new Intent(NewChatActivity.this, ChatHomeActivity.class);
-            startActivity(i);
+*/
+//            Intent i = new Intent(NewChatActivity.this, ChatHomeActivity.class);
+//            startActivity(i);
             finish();
 
 
 
         }
     }
+
+
 }

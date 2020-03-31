@@ -123,5 +123,14 @@ public class ChatHomeActivity extends AppCompatActivity implements View.OnClickL
             return view;
         }
     }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+
+        userChats = tinydb.getListChat(CHAT);
+        allChatsListview.setAdapter(new CustomAdapter());
+    }
 }
 //Log.d(TAG, "lol: ");
