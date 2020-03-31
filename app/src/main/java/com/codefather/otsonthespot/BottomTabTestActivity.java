@@ -61,7 +61,7 @@ public class BottomTabTestActivity extends AppCompatActivity
             switch (menuItem.getItemId())
             {
                 case R.id.profile:
-
+                    selectedFragment = new ProfileFragment();
                     break;
 
                 case R.id.notes:
@@ -73,7 +73,7 @@ public class BottomTabTestActivity extends AppCompatActivity
                     break;
 
                 case R.id.group:
-
+                    selectedFragment = new GroupFragment();
                     break;
 
                 case R.id.inbox:
