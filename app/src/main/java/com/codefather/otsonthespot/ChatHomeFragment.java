@@ -2,10 +2,8 @@ package com.codefather.otsonthespot;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,7 +18,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 
-public class ChatHomeActivity extends Fragment implements View.OnClickListener
+public class ChatHomeFragment extends Fragment implements View.OnClickListener
 {
     private static final String TAG = "ChatHomeActivity: ";
     private static final String USER = "user";
@@ -40,7 +38,7 @@ public class ChatHomeActivity extends Fragment implements View.OnClickListener
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        view = inflater.inflate(R.layout.activity_chat_home, container, false);
+        view = inflater.inflate(R.layout.fragment_chat_home, container, false);
 
         initialize();
 
@@ -57,7 +55,7 @@ public class ChatHomeActivity extends Fragment implements View.OnClickListener
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_chat_home);
+//        setContentView(R.layout.fragment_chat_home);
         Log.e(TAG, "lol:--------------------------------------------");
         /*initialize();
 

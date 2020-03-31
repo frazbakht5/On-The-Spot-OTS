@@ -3,7 +3,6 @@ package com.codefather.otsonthespot;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -31,7 +30,7 @@ public class BottomTabTestActivity extends AppCompatActivity
 
         bottomNavigation.setOnNavigationItemSelectedListener(bnv);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new SearchFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new SearchPartnerFragment()).commit();
 
 
     }
@@ -41,7 +40,6 @@ public class BottomTabTestActivity extends AppCompatActivity
         bottomNavigation = findViewById(R.id.bottomNavigation);
         bottomNavigation.setSelectedItemId(R.id.search);
         frameLayout = findViewById(R.id.frameLayout);
-        testTextView = findViewById(R.id.testTextView);
     }
 
     @Override
@@ -66,12 +64,12 @@ public class BottomTabTestActivity extends AppCompatActivity
 
                     break;
 
-                case R.id.dashboard:
-
+                case R.id.notes:
+                    selectedFragment = new NotesFragment();
                     break;
 
                 case R.id.search:
-                    selectedFragment = new SearchFragment();
+                    selectedFragment = new SearchPartnerFragment();
                     break;
 
                 case R.id.group:
@@ -79,7 +77,7 @@ public class BottomTabTestActivity extends AppCompatActivity
                     break;
 
                 case R.id.inbox:
-                    selectedFragment = new ChatHomeActivity();
+                    selectedFragment = new ChatHomeFragment();
                     break;
 
                 default:

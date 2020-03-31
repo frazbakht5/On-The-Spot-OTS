@@ -7,9 +7,9 @@
         android:title="Profile" />
 
     <item
-        android:id="@+id/dashboard"
+        android:id="@+id/notes"
         android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="@string/title_dashboard" />
+        android:title="Notes" />
 
     <item
         android:id="@+id/search"

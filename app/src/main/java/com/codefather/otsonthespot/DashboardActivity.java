@@ -4,19 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import java.io.IOException;
 
 
 public class DashboardActivity extends AppCompatActivity implements View.OnClickListener
@@ -81,7 +75,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
     {
         if (v == chatButton)
         {
-            Intent i = new Intent(DashboardActivity.this, ChatHomeActivity.class);
+            Intent i = new Intent(DashboardActivity.this, ChatHomeFragment.class);
             startActivity(i);
 //            finish();
         }
